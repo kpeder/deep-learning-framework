@@ -2,7 +2,7 @@
 keras:
   backend: "tensorflow"
 multiprocessing: false
-tensorflow: {
+processors:
   cpus: 1,
   gpus: 0
-}
+tensorflow: {}

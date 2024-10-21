@@ -34,9 +34,16 @@ class Config(BaseConfig):
     '''
 
     def __enter__(self):
+        '''
+        Context Manager entry method.
+        '''
         return self
 
-    def __exit__(sefl, exc_type, exc_value, exc_traceback):
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        '''
+        Context Manager exit method.
+        '''
+        self.configuration = None
         return False
 
     def __init__(self):

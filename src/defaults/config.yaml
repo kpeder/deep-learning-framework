@@ -1,0 +1,8 @@
+---
+keras:
+  backend: "tensorflow"
+multiprocessing: false
+tensorflow: {
+  cpus: 1,
+  gpus: 0
+}

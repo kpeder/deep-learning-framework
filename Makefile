@@ -16,7 +16,7 @@ pre-commit:
 
 .PHONY: configure
 configure:
-	@export KERAS_BACKEND="tensorflow"
+	@export PYTHONPATH="./src"
 
 .PHONY: install
 install:

@@ -23,3 +23,6 @@ venv.bak/
 
 # Local Configurations
 local.*
+
+# Log files
+log/*.log

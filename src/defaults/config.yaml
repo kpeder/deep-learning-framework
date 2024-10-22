@@ -1,6 +1,11 @@
 ---
 keras:
-  backend: "tensorflow"
+  backend: tensorflow
+logging:
+  formatter: '%(asctime)s: %(name)s: %(levelname)s: %(message)s'
+  handler: stream
+  level: INFO
+  stream: stdout
 multiprocessing: false
 processors:
   cpus: 1,

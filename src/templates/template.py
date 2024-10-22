@@ -6,7 +6,7 @@ import datetime, logging, os, sys
 '''
 Set up the Python Logger using class Config().
 '''
-logname = "mnist_example.log"
+logname = "template.log"
 logger = logging.getLogger(logname)
 
 conf = Config()
@@ -42,38 +42,9 @@ parser.add_argument('--keras-backend-override', action='store', dest='keras_back
 args = parser.parse_args()
 
 '''
-Configure and import deep learning modules.
+Configure and import Keras.
 '''
 os.environ["KERAS_BACKEND"] = args.keras_backend_override or conf.configuration["keras"]["backend"]
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 
-import keras, numpy, tensorflow
-
-
-'''
-The keras mnist dataset is a set of character images. Each image is 28 x 28 BW pixels.
-'''
-
-'''
-Load some data from the keras mnist dataset into dataframes, split for training and testing.
-x_* hold images, and y_* hold labels.
-'''
-(x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
-
-'''
-Cast image pixels to float, then normalize pixel brightness to scale [0,1], using the maximum value as divisor.
-'''
-x_train = x_train.astype('float32') / 255
-x_test = x_test.astype('float32') / 255
-
-'''
-Expand the shape of the dataframes to include binary color channel (BW) as the last dimension.
-'''
-x_train = numpy.expand_dims(x_train, -1)
-x_test = numpy.expand_dims(x_test, -1)
-
-'''
-Check the shape of the dataframes.
-'''
-print(f'Train dataframe shape (images, pwidth, pheight, channel): {x_train.shape}')
-print(f'Test dataframe shape (images, pwidth, pheight, channel): {x_test.shape}')
+import keras

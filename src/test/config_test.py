@@ -12,7 +12,7 @@ def test_default_config():
                 'backend': 'tensorflow'
             },
             'logging': {
-                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',  # noqa: E501
+                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                 'handler': 'stream',
                 'level': 'INFO',
                 'stream': 'stdout'
@@ -34,7 +34,7 @@ def test_update_config():
                 'backend': 'tensorflow'
             },
             'logging': {
-                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',  # noqa: E501
+                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                 'handler': 'stream',
                 'level': 'INFO',
                 'stream': 'stdout'
@@ -52,7 +52,7 @@ def test_update_config():
                 'backend': 'tensorflow'
             },
             'logging': {
-                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',  # noqa: E501
+                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                 'handler': 'stream',
                 'level': 'INFO',
                 'stream': 'stdout'
@@ -69,16 +69,16 @@ def test_update_config():
 def test_dict_config():
     with Config() as conf:
         conf.configure(config={
-                'keras': {
-                    'backend': 'pytorch'
-                },
-                'multiprocessing': False,
-                'processors': {
-                    'cpus': 0,
-                    'gpus': 1
-                },
-                'pytorch': {}
-            })
+            'keras': {
+                'backend': 'pytorch'
+            },
+            'multiprocessing': False,
+            'processors': {
+                'cpus': 0,
+                'gpus': 1
+            },
+            'pytorch': {}
+        })
         print(conf.configuration)
         assert conf.configuration == {
             'keras': {
@@ -105,7 +105,7 @@ def test_from_file_config():
                 'backend': 'tensorflow'
             },
             'logging': {
-                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',  # noqa: E501
+                'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                 'handler': 'stream',
                 'level': 'INFO',
                 'stream': 'stdout'

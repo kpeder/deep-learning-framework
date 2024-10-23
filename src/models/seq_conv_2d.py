@@ -21,8 +21,7 @@ class SequentialConv2D(keras.Sequential, AbstractContextManager):
             keras.layers.Conv2D(128, kernel_size=(3, 3), activation="relu"),
             keras.layers.GlobalAveragePooling2D(),
             keras.layers.Dropout(0.5),
-            keras.layers.Dense(num_classes, activation="softmax")
-            ])
+            keras.layers.Dense(num_classes, activation="softmax")])
 
     def __enter__(self) -> Self:
         '''

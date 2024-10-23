@@ -1,5 +1,3 @@
-CWD := $(shell pwd)
-
 .PHONY: help
 help:
 	@echo 'make <target>'
@@ -23,4 +21,4 @@ install:
 
 .PHONY: test
 test:
-	@export PYTHONPATH=$(shell pwd)/src && pytest
+	@export PYTHONPATH=$(shell pwd)/src && pytest -vv

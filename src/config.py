@@ -3,7 +3,8 @@ from contextlib2 import AbstractContextManager
 from typing import Self
 from mergedeep import merge
 
-import os, yaml
+import os
+import yaml
 
 
 class BaseConfig(ABC, AbstractContextManager):
@@ -12,7 +13,7 @@ class BaseConfig(ABC, AbstractContextManager):
     '''
 
     @abstractmethod
-    def configure(self, config: dict=None) -> Self:
+    def configure(self, config: dict = None) -> Self:
         '''
         Abstract method.
         Accepts self, configuration dictionary.
@@ -21,7 +22,7 @@ class BaseConfig(ABC, AbstractContextManager):
 
     @staticmethod
     @abstractmethod
-    def from_file(format: str=None, path: str=None) -> dict:
+    def from_file(format: str = None, path: str = None) -> dict:
         '''
         Abstract method.
         Accepts format, path of a configuration file.
@@ -51,10 +52,10 @@ class Config(BaseConfig):
         '''
         Create the empty top level configuration dict.
         '''
-        self.configuration: dict={}
+        self.configuration: dict = {}
 
-    def configure(self, config: dict=None) -> Self:
-        if config == None:
+    def configure(self, config: dict = None) -> Self:
+        if config is None:
             path = os.environ.get('PYTHONPATH')
             try:
                 with open(f'{path}/defaults/config.yaml') as file:
@@ -62,25 +63,20 @@ class Config(BaseConfig):
                     values = merge(self.configuration, defaults)
                     self.configuration.update(values)
                     return
-            except:
-                raise Exception("Could not load default configuration!")
+            except Exception as e:
+                raise e
         else:
-            try:
-                values = merge(self.configuration, config)
-                self.configuration.update(values)
-                return
-            except:
-                raise Exception("Could not load configuration!")
+            values = merge(self.configuration, config)
+            self.configuration.update(values)
+            return
 
     @staticmethod
-    def from_file(format: str=None, path: str=None) -> dict:
-        config: dict={}
-        if format == 'YAML' and path != None:
+    def from_file(format: str = None, path: str = None) -> dict:
+        config: dict = {}
+        if format == 'YAML' and path is not None:
             try:
                 with open(f'{path}') as file:
                     config = yaml.load(file, Loader=yaml.FullLoader)
                     return config
-            except:
-                raise Exception("Could not load configuration from file!")
-        else:
-            raise Exception("Valid path to YAML config file required!")
+            except Exception as e:
+                raise e

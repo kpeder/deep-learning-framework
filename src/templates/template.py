@@ -1,4 +1,4 @@
-from config import Config
+from utils.config import Config
 
 import argparse
 import datetime
@@ -52,3 +52,6 @@ logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 import keras  # noqa: E402
 
 print(f'Using keras version {keras.__version__}.')
+
+with logger as log:
+    log.info("does this work?")

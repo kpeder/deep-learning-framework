@@ -1,4 +1,4 @@
-from config import Config
+from utils.config import Config
 from models.seq_conv_2d import SequentialConv2D
 import os
 

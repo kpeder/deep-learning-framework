@@ -11,7 +11,7 @@ try:
     handler.setFormatter(formatter)
     logger.setLevel(logging.WARN)
     logger.addHandler(handler)
-    logger.warning(f'Package loglevel has been set to {logger.getEffectiveLevel()}')
+    logger.warning(f'Package loglevel has been set to {logger.getEffectiveLevel()}.')
 except Exception as e:
     logger.exception(e)
     raise e

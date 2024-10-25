@@ -2,8 +2,8 @@
 keras:
   backend: tensorflow
 logging:
-  formatter: '%(asctime)s: %(name)s: %(levelname)s: %(message)s'
-  handler: stream
+  format: '%(asctime)s: %(name)s: %(levelname)s: %(message)s'
   level: INFO
-  stream: stdout
+  path: stdout
+  type: stream
 multiprocessing: False

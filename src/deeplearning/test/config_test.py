@@ -28,10 +28,10 @@ def test_default_config():
                     'backend': 'tensorflow'
                 },
                 'logging': {
-                    'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
-                    'handler': 'stream',
+                    'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     'level': 'INFO',
-                    'stream': 'stdout'
+                    'path': 'stdout',
+                    'type': 'stream'
                 },
                 'multiprocessing': False
             }
@@ -64,10 +64,10 @@ def test_update_config():
                     'backend': 'tensorflow'
                 },
                 'logging': {
-                    'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
-                    'handler': 'stream',
+                    'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     'level': 'INFO',
-                    'stream': 'stdout'
+                    'path': 'stdout',
+                    'type': 'stream'
                 },
                 'multiprocessing': True
             }
@@ -94,6 +94,12 @@ def test_dict_config():
             'keras': {
                 'backend': 'pytorch'
             },
+            'logging': {
+                'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
+                'level': 'INFO',
+                'path': None,
+                'type': 'file'
+            },
             'multiprocessing': False
         })
         try:
@@ -101,6 +107,12 @@ def test_dict_config():
                 'keras': {
                     'backend': 'pytorch'
                 },
+            'logging': {
+                'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
+                'level': 'INFO',
+                'path': None,
+                'type': 'file'
+            },
                 'multiprocessing': False
             }
         except Exception as e:
@@ -132,10 +144,10 @@ def test_from_file_config():
                     'backend': 'tensorflow'
                 },
                 'logging': {
-                    'formatter': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
-                    'handler': 'stream',
+                    'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                     'level': 'INFO',
-                    'stream': 'stdout'
+                    'path': 'stdout',
+                    'type': 'stream'
                 },
                 'multiprocessing': False
             }

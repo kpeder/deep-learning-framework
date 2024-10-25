@@ -1,4 +1,4 @@
-from config import Config
+from deeplearning.utils.config import Config
 
 import argparse
 import datetime
@@ -8,10 +8,9 @@ import sys
 
 
 '''
-Set up the Python Logger using class Config().
+Set up the Python Logger using the configuration class defaults.
 '''
-logname = "template.log"
-logger = logging.getLogger(logname)
+logger = logging.getLogger(__name__)
 
 conf = Config()
 conf.configure(config=None)
@@ -24,14 +23,14 @@ if conf.configuration["logging"]["handler"] == "stream":
 
 if conf.configuration["logging"]["handler"] == "file":
     logdate = datetime.datetime.now()
-    handler = logging.FileHandler(f'{os.environ["PWD"]}/log/{logdate.strftime("%Y%m%d")}_{logname}')
+    handler = logging.FileHandler(f'{os.environ["PWD"]}/log/{logdate.strftime("%Y%m%d")}_template.log')
 
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 if hasattr(logging, conf.configuration["logging"]["level"].upper()):
     logger.setLevel(getattr(logging, conf.configuration["logging"]["level"].upper()))
-    logger.warning(f'Package loglevel has been set to {logger.getEffectiveLevel()}')
+    logger.warning(f'Program loglevel has been set to {logger.getEffectiveLevel()}')
 
 '''
 Configure argument parsing, for convenience.
@@ -51,4 +50,4 @@ logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 
 import keras  # noqa: E402
 
-print(f'Using keras version {keras.__version__}.')
+logger.info(f'Using keras version {keras.__version__}.')

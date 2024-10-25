@@ -1,5 +1,5 @@
-from config import Config
-from models.seq_conv_2d import SequentialConv2D
+from deeplearning.utils.config import Config
+from deeplearning.models.seq_conv_2d import SequentialConv2D
 
 import argparse
 import datetime
@@ -10,10 +10,9 @@ import sys
 
 
 '''
-Set up the Python Logger using class Config().
+Set up the Python Logger using the configuration class defaults.
 '''
-logname = "mnist_example.log"
-logger = logging.getLogger(logname)
+logger = logging.getLogger(__name__)
 
 conf = Config()
 conf.configure(config=None)
@@ -26,14 +25,14 @@ if conf.configuration["logging"]["handler"] == "stream":
 
 if conf.configuration["logging"]["handler"] == "file":
     logdate = datetime.datetime.now()
-    handler = logging.FileHandler(f'{os.environ["PWD"]}/log/{logdate.strftime("%Y%m%d")}_{logname}')
+    handler = logging.FileHandler(f'{os.environ["PWD"]}/log/{logdate.strftime("%Y%m%d")}_mnist.log')
 
 handler.setFormatter(formatter)
 logger.addHandler(handler)
 
 if hasattr(logging, conf.configuration["logging"]["level"].upper()):
     logger.setLevel(getattr(logging, conf.configuration["logging"]["level"].upper()))
-    logger.warning(f'Package loglevel has been set to {logger.getEffectiveLevel()}')
+    logger.warning(f'Program loglevel has been set to {logger.getEffectiveLevel()}')
 
 '''
 Configure argument parsing, for convenience.
@@ -85,10 +84,8 @@ logger.info('Expanded data shape to add color channel.')
 '''
 Check the shape of the dataframes and log the information.
 '''
-logger.info(
-    f'Train dataframe shape (images, pwidth, pheight, channels): {x_train.shape}')
-logger.info(
-    f'Test dataframe shape (images, pwidth, pheight, channels): {x_test.shape}')
+logger.info(f'Train dataframe shape (images, pwidth, pheight, channels): {x_train.shape}')
+logger.info(f'Test dataframe shape (images, pwidth, pheight, channels): {x_test.shape}')
 
 '''
 The num_classes parameter indicates how many unique labels the model will predict.

@@ -6,8 +6,4 @@ logging:
   handler: stream
   level: INFO
   stream: stdout
-multiprocessing: false
-processors:
-  cpus: 1,
-  gpus: 0
-tensorflow: {}
+multiprocessing: False

@@ -7,7 +7,7 @@
 - [X] Structured logging (add to ADRs)
 - [X] Logger with ContextManager
 - [X] Docstrings
-- [ ] GitHub Action to run pre-commit checks
+- [X] GitHub Action to run pre-commit checks
 - [ ] Model Training, Testing
 - [ ] Model Output Catalog
 - [ ] Multiprocessing Support and Flag

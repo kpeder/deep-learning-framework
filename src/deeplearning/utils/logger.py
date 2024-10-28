@@ -78,5 +78,5 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
         yield ctxtlogger
 
     finally:
-        ctxtlogger.handlers.clear()
+        ctxtlogger.removeHandler(handler)
         ctxtlogger = None

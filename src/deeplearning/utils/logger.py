@@ -6,6 +6,7 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+
 @contextmanager
 def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                      level: str = 'WARN',
@@ -23,12 +24,12 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
         type (str): The type of log handler to use. One of ['file', 'stream'].
 
     Returns:
-        ctxlogger (logging.Logger): A configured instance of the Logger class, enabled with the @contextmanager decorator.
+        ctxtlogger (logging.Logger): A configured instance of the Logger class, enabled with the @contextmanager decorator.
 
     Raises:
         e (Exception): Any unhandled exception, as necessary.
     '''
-    ctxlogger = logging.getLogger(name)
+    ctxtlogger = logging.getLogger(name)
 
     try:
         formatter = logging.Formatter(format)
@@ -64,18 +65,18 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
 
     try:
         handler.setFormatter(formatter)
-        ctxlogger.addHandler(handler)
+        ctxtlogger.addHandler(handler)
         if hasattr(logging, level.upper()):
-            ctxlogger.setLevel(getattr(logging, level.upper()))
-            logger.warning(f'Loglevel has been set to {ctxlogger.getEffectiveLevel()} for log {name}.')
+            ctxtlogger.setLevel(getattr(logging, level.upper()))
+            logger.warning(f'Loglevel has been set to {ctxtlogger.getEffectiveLevel()} for log {name}.')
 
     except Exception as e:
         logger.exception(e)
         raise e
 
     try:
-        yield ctxlogger
+        yield ctxtlogger
 
     finally:
-        ctxlogger.handlers.clear()
-        ctxlogger = None
+        ctxtlogger.removeHandler(handler)
+        ctxtlogger = None

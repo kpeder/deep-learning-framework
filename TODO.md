@@ -2,7 +2,7 @@
 
 - [ ] README.md
 - [ ] CONTRIB.md
-- [ ] Architecture Decision Records
+- [X] Architecture Decision Records
 - [X] Package restructuring
 - [X] Structured logging (add to ADRs)
 - [X] Logger with ContextManager

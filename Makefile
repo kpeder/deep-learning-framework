@@ -21,4 +21,4 @@ install:
 
 .PHONY: test
 test:
-	@export PYTHONPATH=$(shell pwd)/src && pytest -vv
+	@export PYTHONPATH=$(shell pwd)/src && pytest -vv --cov ./src

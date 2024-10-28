@@ -107,12 +107,12 @@ def test_dict_config():
                 'keras': {
                     'backend': 'pytorch'
                 },
-            'logging': {
-                'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
-                'level': 'INFO',
-                'path': None,
-                'type': 'file'
-            },
+                'logging': {
+                    'format': '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
+                    'level': 'INFO',
+                    'path': None,
+                    'type': 'file'
+                },
                 'multiprocessing': False
             }
         except Exception as e:

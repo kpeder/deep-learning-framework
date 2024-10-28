@@ -58,18 +58,18 @@ import keras  # noqa: E402
 
 logger.info(f'Using keras version {keras.__version__}.')
 
-with getContextLogger(name='__cntx__') as ctxlogger:
-    ctxlogger.setLevel(logging.DEBUG)
-    ctxlogger.warning(f'Loglevel has been set to {ctxlogger.getEffectiveLevel()} for log __cntx__.')
-    ctxlogger.debug('A logline.')
+with getContextLogger(name='__ctxt__') as ctxtlogger:
+    ctxtlogger.setLevel(logging.DEBUG)
+    ctxtlogger.warning(f'Loglevel has been set to {ctxtlogger.getEffectiveLevel()} for log __ctxt__.')
+    ctxtlogger.debug('A logline.')
 
-    with getContextLogger(format=conf.configuration["logging"]["format"],
-                          level=conf.configuration["logging"]["level"],
+    with getContextLogger(format='%(message)s',  # raw message data to the handler
+                          level='INFO',
                           name='__with__',
-                          path=conf.configuration["logging"]["path"],
-                          type=conf.configuration["logging"]["type"]) as withlogger:
-        withlogger.setLevel(logging.DEBUG)
+                          path='stdout',
+                          type='stream') as withlogger:
         withlogger.warning(f'Loglevel has been set to {withlogger.getEffectiveLevel()} for log __with__.')
-        withlogger.debug('A logline.')
+        withlogger.debug('A logline.')  # this shouldn't log anything
+        withlogger.info((None, 28, 28, 1))  # emit a tuple to the handler
 
-    ctxlogger.debug('Another logline.')
+    ctxtlogger.debug('Another logline.')

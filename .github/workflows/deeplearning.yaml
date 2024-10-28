@@ -1,0 +1,26 @@
+name: Python deeplearning package
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install OS packages
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y build-essential pre-commit
+      - name: Install Python modules
+        run: |
+          make install
+      - name: Run lint checks
+        run: |
+          make pre-commit
+      - name: Test the package
+        run: |
+          make test

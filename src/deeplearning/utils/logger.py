@@ -6,6 +6,7 @@ import sys
 
 logger = logging.getLogger(__name__)
 
+
 @contextmanager
 def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
                      level: str = 'WARN',

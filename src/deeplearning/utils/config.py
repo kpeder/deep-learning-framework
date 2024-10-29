@@ -1,7 +1,6 @@
-from abcmeta import ABC, abstractmethod
+from abcmeta import ABC, abstractmethod  # type: ignore
 from contextlib2 import AbstractContextManager
-from typing import Self
-from mergedeep import merge
+from mergedeep import merge  # type: ignore
 
 import logging
 import os
@@ -17,7 +16,7 @@ class BaseConfig(ABC, AbstractContextManager):
     '''
 
     @abstractmethod
-    def configure(self, config: dict = None) -> Self:
+    def configure(self, config: dict | None = None):
         '''
         Abstract method to configure the class from a configuration dictionary.
 
@@ -34,7 +33,7 @@ class BaseConfig(ABC, AbstractContextManager):
 
     @staticmethod
     @abstractmethod
-    def from_file(format: str = None, path: str = None) -> dict:
+    def from_file(format: str | None = None, path: str | None = None):
         '''
         Static abstract method to fetch configuration from file.
 
@@ -55,20 +54,20 @@ class Config(BaseConfig):
     A configuration class for the deeplearning framework. Implements BaseConfig().
     '''
 
-    def __enter__(self) -> Self:
+    def __enter__(self):
         '''
         Context Manager entry method.
         '''
         return self
 
-    def __exit__(self, *args) -> bool:
+    def __exit__(self, *args):
         '''
         Context Manager exit method.
         '''
         self.configuration = None
         return False
 
-    def __init__(self) -> Self:
+    def __init__(self):
         '''
         Create the empty top level configuration dict.
 
@@ -80,7 +79,7 @@ class Config(BaseConfig):
         '''
         self.configuration: dict = {}
 
-    def configure(self, config: dict = None) -> Self:
+    def configure(self, config: dict | None = None):
         '''
         Method to configure the class from a configuration dictionary.
 
@@ -110,7 +109,7 @@ class Config(BaseConfig):
             return
 
     @staticmethod
-    def from_file(format: str = None, path: str = None) -> dict:
+    def from_file(format: str | None = None, path: str | None = None):
         '''
         Static method to fetch configuration from file.
 
@@ -125,13 +124,13 @@ class Config(BaseConfig):
             e (Exception): Any unhandled exception, as necessary.
         '''
         config: dict = {}
-        if format.upper() != 'YAML':
+        if format is not None and format.upper() != 'YAML':
             try:
                 raise Exception('Unsupported configuration file format!')
             except Exception as e:
                 logger.exception(e)
                 raise e
-        elif format.upper() == 'YAML' and path is not None:
+        elif format is not None and format.upper() == 'YAML' and path is not None:
             try:
                 with open(f'{path}') as file:
                     config = yaml.load(file, Loader=yaml.FullLoader)

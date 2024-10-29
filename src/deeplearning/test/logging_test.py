@@ -61,7 +61,7 @@ def test_custom_context_logger():
             logger.exception(e)
             raise e
 
-        with getContextLogger(level='DEBUG', name='__test__') as ctxtlogger2:
+        with getContextLogger(level='DEBUG', name='__test__', path='stdout', type='stream') as ctxtlogger2:
             try:
                 assert ctxtlogger.disabled is False
                 assert ctxtlogger.level == 10
@@ -74,7 +74,7 @@ def test_custom_context_logger():
                         assert handler.formatter._fmt == '%(asctime)s: %(name)s: %(levelname)s: %(message)s'
                         assert handler.level == logging.NOTSET
                     else:
-                        assert isinstance(handler, logging.FileHandler or logging.StreamHandler)
+                        raise TypeError(f'Unsupported Handler subclass {handler.__class__}.')
                 assert ctxtlogger.name == '__test__'
             except Exception as e:
                 logger.exception(e)

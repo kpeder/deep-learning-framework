@@ -5,7 +5,7 @@
 - [X] CONTRIB.md
 - [X] Architecture Decision Records
 - [X] Package restructuring
-- [ ] Add structured logging to ADRs
+- [X] Add structured logging to ADRs
 - [X] Logger with ContextManager
 - [X] Docstrings
 - [X] GitHub Action to run pre-commit checks

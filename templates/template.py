@@ -11,7 +11,8 @@ import sys
 '''
 Set up the Python Logger using the configuration class defaults.
 '''
-logger = logging.getLogger(__name__)
+handler: logging.Handler
+logger: logging.Logger = logging.getLogger(__name__)
 
 conf = Config()
 conf.configure(config=None)
@@ -53,7 +54,7 @@ Configure and import Keras.
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 
-import keras  # noqa: E402
+import keras  # type: ignore # noqa: E402
 
 
 logger.info(f'Using keras version {keras.__version__}.')

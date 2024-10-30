@@ -1,14 +1,14 @@
 from contextlib2 import AbstractContextManager
-from typing import Self
+from typing import Literal
 
-import keras
+import keras  # type: ignore
 
 
 class SequentialConv2D(keras.Sequential, AbstractContextManager):
     '''
     Sequential model using regularized convolutional neural network.
     '''
-    def __init__(self, input_shape: tuple, num_classes: int) -> Self:
+    def __init__(self, input_shape: tuple, num_classes: int):
         '''
         Implement the default model and return the instance.
         '''
@@ -23,13 +23,13 @@ class SequentialConv2D(keras.Sequential, AbstractContextManager):
             keras.layers.Dropout(0.5),
             keras.layers.Dense(num_classes, activation="softmax")])
 
-    def __enter__(self) -> Self:
+    def __enter__(self):
         '''
         Context Manager entry method.
         '''
         return self
 
-    def __exit__(self, *args) -> bool:
+    def __exit__(self, *args) -> Literal[False]:
         '''
         Context Manager exit method.
         '''

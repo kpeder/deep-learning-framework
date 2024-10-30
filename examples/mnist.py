@@ -3,7 +3,7 @@ from deeplearning.utils.config import Config
 import argparse
 import datetime
 import logging
-import numpy
+import numpy  # type: ignore
 import os
 import sys
 
@@ -11,7 +11,8 @@ import sys
 '''
 Set up the Python Logger using the configuration class defaults.
 '''
-logger = logging.getLogger(__name__)
+handler: logging.Handler
+logger: logging.Logger = logging.getLogger(__name__)
 
 conf = Config()
 conf.configure(config=None)
@@ -53,7 +54,7 @@ Configure and import deep learning modules. We can't reconfigure the keras backe
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 
-import keras  # noqa: E402
+import keras  # type: ignore # noqa: E402
 from deeplearning.models.seq_conv_2d import SequentialConv2D  # noqa: E402
 
 

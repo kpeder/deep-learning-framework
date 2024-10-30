@@ -29,6 +29,9 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
     Raises:
         e (Exception): Any unhandled exception, as necessary.
     '''
+    ctxtlogger: logging.Logger | None
+    handler: logging.Handler
+
     ctxtlogger = logging.getLogger(name)
 
     try:

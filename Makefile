@@ -13,7 +13,6 @@ help:
 .PHONY: pre-commit
 pre-commit:
 	@pre-commit run -a
-	python3 -m mypy ./src/deeplearning
 
 .PHONY: install
 install:

@@ -16,7 +16,6 @@ pre-commit:
 
 .PHONY: install
 install:
-	@sudo apt-get install -y python3-pip
 	@sudo pip3 install -r requirements.txt --break-system-packages
 
 .PHONY: test

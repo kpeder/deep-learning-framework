@@ -33,7 +33,10 @@ def test_default_config():
                     'path': 'stdout',
                     'type': 'stream'
                 },
-                'multiprocessing': False
+                'multiprocessing': {
+                    'enabled': False,
+                    'workers': 3
+                }
             }
         except Exception as e:
             logger.exception(e)
@@ -56,7 +59,9 @@ def test_update_config():
     with Config() as conf:
         conf.configure(config=None)
         conf.configure(config={
-            'multiprocessing': True
+            'multiprocessing': {
+                'enabled': True
+            }
         })
         try:
             assert conf.configuration == {
@@ -69,7 +74,10 @@ def test_update_config():
                     'path': 'stdout',
                     'type': 'stream'
                 },
-                'multiprocessing': True
+                'multiprocessing': {
+                    'enabled': True,
+                    'workers': 3
+                }
             }
         except Exception as e:
             logger.exception(e)
@@ -100,7 +108,9 @@ def test_dict_config():
                 'path': None,
                 'type': 'file'
             },
-            'multiprocessing': False
+            'multiprocessing': {
+                'enabled': False
+            }
         })
         try:
             assert conf.configuration == {
@@ -113,7 +123,9 @@ def test_dict_config():
                     'path': None,
                     'type': 'file'
                 },
-                'multiprocessing': False
+                'multiprocessing': {
+                    'enabled': False
+                }
             }
         except Exception as e:
             logger.exception(e)
@@ -149,7 +161,10 @@ def test_from_file_config():
                     'path': 'stdout',
                     'type': 'stream'
                 },
-                'multiprocessing': False
+                'multiprocessing': {
+                    'enabled': False,
+                    'workers': 3
+                }
             }
         except Exception as e:
             logger.exception(e)

@@ -1,6 +1,6 @@
 from contextlib2 import nullcontext
 from deeplearning.utils.config import Config
-from deeplearning.utils.logger import getContextLogger
+from deeplearning.utils.process import callback_logger, dequeue, enqueue, do
 
 import argparse
 import datetime
@@ -18,7 +18,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 conf = Config()
 conf.configure(config=None)  # load defaults
-conf.configure(config={ "multiprocessing": { "enabled": True }})  # merge updates
+conf.configure(config={"multiprocessing": {"enabled": True}})  # merge updates
 
 try:
     formatter = logging.Formatter(conf.configuration["logging"]["format"])
@@ -64,109 +64,78 @@ import keras  # type: ignore # noqa: E402
 logger.info(f'Using keras version {keras.__version__}.')
 
 
-'''
-Within the context of a logger to document the experiment,
-do some experiment, log the activity and return the result.
-'''
-def do(logname: str=None, queue: mp.Queue=None):
-    try:
-        with getContextLogger(name=logname) as ctxtlogger:
-            ctxtlogger.setLevel(logging.DEBUG)
-            ctxtlogger.warning(f'Loglevel has been set to {ctxtlogger.getEffectiveLevel()} for log {logname}.')
-            ctxtlogger.debug('A logline.')
-            ctxtlogger.info(f'Process PID: {os.getpid()}')
-            ctxtlogger.info(f'Parent PID: {os.getppid()}')
-            ctxtlogger.debug('Another logline.')
-            retval = logname, (os.getpid(), os.getppid())  # A convenient tuple that shows if we're multiprocessing
-            if queue is not None:
-                enqueue(retval, queue)
-            return retval
-    except Exception as e:
-        raise e
-
-
-''' A callback to log the result of some experiments.'''
-def callback(results: list=None):
-    try:
-        for r in results:
-            logger.info(r)
-    except Exception as e:
-        raise e
-
-
-''' Dequeue wrapper.'''
-def dequeue(queue: mp.Queue=None):
-    try:
-        if not queue.empty():
-            result = do(*queue.get(block=False))
-            return result
-    except Exception as e:
-        raise e
-
-
-''' Enqueue wrapper.'''
-def enqueue(item: tuple=None, queue: mp.Queue=None):
-    try:
-        queue.put(item)
-        return
-    except Exception as e:
-        raise e
-
-
-''' The worker pool with async map and callback.'''
+''' Use a worker pool with async map and callback.'''
 with mp.Pool(conf.configuration["multiprocessing"]["workers"]) if conf.configuration["multiprocessing"]["enabled"] else nullcontext() as mpp:
 
     if mpp is not None:
-        results = mpp.map_async(do,['__ctxt__','__iter__','__test__','__with__'], callback=callback)
+        results = mpp.map_async(do, ['__ctxt__', '__iter__', '__test__', '__with__'], callback=callback_logger)
         results.wait()
     else:
-        results: list = []
-        for name in ['__ctxt__','__iter__','__test__','__with__']:
+        result_list: list = []
+        for name in ['__ctxt__', '__iter__', '__test__', '__with__']:
             result = do(name)
-            results.append(result)
+            result_list.append(result)
 
-        callback(results)
+        callback_logger(result_list, __name__)
 
 
-''' The parallel processing queue.'''
+''' Perform threaded parallel processing from a work queue.'''
 with mp.Manager() if conf.configuration["multiprocessing"]["enabled"] else nullcontext() as mpp:
 
-    output = mpp.Queue()
-    input = mpp.Queue()
+    if mpp is not None:
+        ''' In and out queues.'''
+        inpipe = mpp.Queue()
+        outpipe = mpp.Queue()
 
-    for args in [('__ctxt__', output),('__iter__', output),('__test__', output),('__with__', output)]:
-        enqueue(args, input)
+        ''' Items to process in a list of tuples.'''
+        args_list: list = [('__ctxt__', outpipe), ('__iter__', outpipe), ('__test__', outpipe), ('__with__', outpipe)]
+        for args in args_list:
+            enqueue(args, inpipe)  # type: ignore[arg-type]
 
-    proc_list: list=[]
-    semaphore = mp.BoundedSemaphore(conf.configuration["multiprocessing"]["workers"])
+        ''' Primitives for worker coordination.'''
+        proc_list: list = []
+        semaphore = mp.BoundedSemaphore(conf.configuration["multiprocessing"]["workers"])
 
-    try:
-        ''' While there's queued work, keep allocating processors.'''
-        while not input.empty():
-            if semaphore.acquire(block=False):
-                proc = mp.Process(target=dequeue, args=(input,))
-                proc.start()
-                logger.info(f'Process {proc.name} with PID {proc.pid} acquired semaphore!')
-                proc_list.append(proc)
-            for proc in proc_list:
-                if proc.exitcode is not None:
-                    proc_list.remove(proc)
-                    semaphore.release()
-                    logger.info(f'Process {proc.name} with PID {proc.pid} released semaphore!')
-    finally:
-        ''' When the work is all allocated, wait for it to finish.'''
-        while len(proc_list) > 0:
-            for proc in proc_list:
-                if proc.exitcode is not None:
-                    proc_list.remove(proc)
-                    semaphore.release()
-                    logger.info(f'Process {proc.name} with PID {proc.pid} released semaphore!')
+        try:
+            ''' While there's queued work, keep allocating processors to free threads.'''
+            while not inpipe.empty():
+                ''' Get a free thread, configure and start a process, and add it to a list for tracking.'''
+                if semaphore.acquire(block=False):
+                    args = dequeue(inpipe)
+                    proc = mp.Process(target=do, args=args)
+                    proc.start()
+                    logger.info(f'Started process {proc.name} with PID {proc.pid}.')
+                    proc_list.append(proc)
 
-    try:
-        results: list=[]
-        while not output.empty():
-            results.append(output.get())
-        for result in results:
-            logger.info(f'{result}')
-    except Exception as e:
-        raise e
+                ''' Prune the process list and release threads as work completes.'''
+                for proc in proc_list:
+                    if proc.exitcode is not None:
+                        proc_list.remove(proc)
+                        semaphore.release()
+                        logger.info(f'Finished process {proc.name} with PID {proc.pid}.')
+
+        finally:
+            ''' When the work is all allocated, wait for it to finish.'''
+            while len(proc_list) > 0:
+                for proc in proc_list:
+                    if proc.exitcode is not None:
+                        proc_list.remove(proc)
+                        semaphore.release()
+                        logger.info(f'Finished process {proc.name} with PID {proc.pid}.')
+
+        try:
+            ''' Process the results from the output queue.'''
+            result_list = []
+            while not outpipe.empty():
+                result_list.append(dequeue(outpipe))
+
+        finally:
+            callback_logger(result_list, __name__)
+
+    else:
+        result_list = []
+        for name in ['__ctxt__', '__iter__', '__test__', '__with__']:
+            result = do(name)
+            result_list.append(result)
+
+        callback_logger(result_list, __name__)

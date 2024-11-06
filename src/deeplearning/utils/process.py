@@ -8,7 +8,7 @@ import os
 logger = logging.getLogger(__name__)
 
 
-def callback_logger(results: list, logname: str = '__main__'):
+def callback_logger(results: list[tuple], logname: str = '__main__'):
     ''' A callback to log the results of experiments.'''
     cblogger = logging.getLogger(logname)
 

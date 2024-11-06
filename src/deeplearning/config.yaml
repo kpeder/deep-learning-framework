@@ -6,4 +6,6 @@ logging:
   level: INFO
   path: stdout
   type: stream
-multiprocessing: False
+multiprocessing:
+  enabled: False
+  workers: 3

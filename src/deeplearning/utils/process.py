@@ -1,15 +1,14 @@
 from deeplearning.utils.logger import getContextLogger
 from queue import Queue
-from typing import Any, Optional
+from typing import Optional
 
 import logging
-import multiprocessing as mp
 import os
 
 logger = logging.getLogger(__name__)
 
 
-def callback_logger(results: list, logname: str='__main__'):
+def callback_logger(results: list, logname: str = '__main__'):
     ''' A callback to log the results of experiments.'''
     cblogger = logging.getLogger(logname)
 

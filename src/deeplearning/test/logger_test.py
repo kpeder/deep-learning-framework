@@ -47,7 +47,7 @@ def test_custom_context_logger():
     Raises:
         e (Exception): Any unhandled exception, as necessary.
     '''
-    with getContextLogger(level='INFO', format='%(message)s', name='__test__', path=f'{os.getcwd()}/log/test.log', type='file') as ctxtlogger:
+    with getContextLogger(level=logging.INFO, format='%(message)s', name='__test__', path=f'{os.getcwd()}/log/test.log', type='file') as ctxtlogger:
         try:
             assert ctxtlogger.disabled is False
             assert ctxtlogger.level == 20
@@ -61,7 +61,7 @@ def test_custom_context_logger():
             logger.exception(e)
             raise e
 
-        with getContextLogger(level='DEBUG', name='__test__', path='stdout', type='stream') as ctxtlogger2:
+        with getContextLogger(level=logging.DEBUG, name='__test__', path='stdout', type='stream') as ctxtlogger2:
             try:
                 assert ctxtlogger.disabled is False
                 assert ctxtlogger.level == 10

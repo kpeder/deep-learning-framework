@@ -1,6 +1,7 @@
 from contextlib2 import nullcontext
 from deeplearning.utils.config import Config
-from deeplearning.utils.process import callback_logger, dequeue, enqueue, do
+from deeplearning.utils.callbacks import results_logger
+from deeplearning.utils.processors import dequeue, enqueue, pid_logger
 
 import argparse
 import datetime
@@ -68,15 +69,15 @@ logger.info(f'Using keras version {keras.__version__}.')
 with mp.Pool(conf.configuration["multiprocessing"]["workers"]) if conf.configuration["multiprocessing"]["enabled"] else nullcontext() as mpp:
 
     if mpp is not None:
-        results = mpp.map_async(do, ['__ctxt__', '__iter__', '__test__', '__with__'], callback=callback_logger)
+        results = mpp.map_async(pid_logger, ['__ctxt__', '__iter__', '__test__', '__with__'], callback=results_logger)
         results.wait()
     else:
         result_list: list = []
         for name in ['__ctxt__', '__iter__', '__test__', '__with__']:
-            result = do(name)
+            result = pid_logger(name)
             result_list.append(result)
 
-        callback_logger(result_list, __name__)
+        results_logger(result_list, __name__)
 
 
 ''' Perform threaded parallel processing from a work queue.'''
@@ -102,7 +103,7 @@ with mp.Manager() if conf.configuration["multiprocessing"]["enabled"] else nullc
                 ''' Get a free thread, configure and start a process, and add it to a list for tracking.'''
                 if semaphore.acquire(block=False):
                     args = dequeue(inpipe)
-                    proc = mp.Process(target=do, args=args)
+                    proc = mp.Process(target=pid_logger, args=args)
                     proc.start()
                     logger.info(f'Started process {proc.name} with PID {proc.pid}.')
                     proc_list.append(proc)
@@ -130,12 +131,12 @@ with mp.Manager() if conf.configuration["multiprocessing"]["enabled"] else nullc
                 result_list.append(dequeue(outpipe))
 
         finally:
-            callback_logger(result_list, __name__)
+            results_logger(result_list, __name__)
 
     else:
         result_list = []
         for name in ['__ctxt__', '__iter__', '__test__', '__with__']:
-            result = do(name)
+            result = pid_logger(name)
             result_list.append(result)
 
-        callback_logger(result_list, __name__)
+        results_logger(result_list, __name__)

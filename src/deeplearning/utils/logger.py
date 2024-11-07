@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 @contextmanager
 def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(message)s',
-                     level: str = 'WARN',
+                     level: int = logging.WARN,
                      name: str = __name__,
                      path: str = 'stdout',
                      type: str = 'stream'):
@@ -18,7 +18,7 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
 
     Args:
         format (str): The format string to use for log entries.
-        level (str): The initial loglevel to use. One of ['NOTSET', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'CRITICAL']
+        level (int): The initial loglevel to use. One of [0, 10, 20, 30, 40, 50]
         name (str): A name for the log.
         path (str): A file path or stream to log to.
         type (str): The type of log handler to use. One of ['file', 'stream'].
@@ -69,8 +69,8 @@ def getContextLogger(format: str = '%(asctime)s: %(name)s: %(levelname)s: %(mess
     try:
         handler.setFormatter(formatter)
         ctxtlogger.addHandler(handler)
-        if hasattr(logging, level.upper()):
-            ctxtlogger.setLevel(getattr(logging, level.upper()))
+        if level in [0, 10, 20, 30, 40, 50]:
+            ctxtlogger.setLevel(level)
             logger.warning(f'Loglevel has been set to {ctxtlogger.getEffectiveLevel()} for log {name}.')
 
     except Exception as e:

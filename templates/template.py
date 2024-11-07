@@ -65,7 +65,7 @@ with getContextLogger(name='__ctxt__') as ctxtlogger:
     ctxtlogger.debug('A logline.')
 
     with getContextLogger(format='%(message)s',  # raw message data to the handler
-                          level='INFO',
+                          level=logging.INFO,
                           name='__with__',
                           path='stdout',
                           type='stream') as withlogger:

@@ -9,6 +9,25 @@ import os
 logger = logging.getLogger(__name__)
 
 
+def dequeue(queue: Queue):
+    ''' Dequeue wrapper.'''
+    try:
+        result = queue.get(block=False)
+        return result
+    except Exception as e:
+        logger.exception(e)
+        raise e
+
+
+def enqueue(item: tuple, queue: Queue):
+    ''' Enqueue wrapper.'''
+    try:
+        queue.put(item)
+    except Exception as e:
+        logger.exception(e)
+        raise e
+
+
 def pid_logger(logname: str, queue: Optional[Queue] = None, loglevel: int = logging.INFO):
     '''
     Within the context of a logger to document the experiment,
@@ -33,25 +52,6 @@ def pid_logger(logname: str, queue: Optional[Queue] = None, loglevel: int = logg
             if queue is not None:
                 enqueue(pids, queue)
             return pids
-    except Exception as e:
-        logger.exception(e)
-        raise e
-
-
-def dequeue(queue: Queue):
-    ''' Dequeue wrapper.'''
-    try:
-        result = queue.get(block=False)
-        return result
-    except Exception as e:
-        logger.exception(e)
-        raise e
-
-
-def enqueue(item: tuple, queue: Queue):
-    ''' Enqueue wrapper.'''
-    try:
-        queue.put(item)
     except Exception as e:
         logger.exception(e)
         raise e

@@ -151,8 +151,8 @@ def project_worker(project: str):
 
 def project_callback(results: list[tuner.Tuner]):
     try:
-        for t in results:
-            logger.info(f'Project {t[0].project_name} returned best parameters {t[1].values}.')
+        for result in results:
+            logger.info(f'Project {result[0]} returned best parameters {result[1].values}.')
     except Exception as e:
         logger.exception(e)
         raise e

@@ -95,13 +95,41 @@ logger.info(f'Train dataframe shape (images, pwidth, pheight, channels): {x_trai
 logger.info(f'Test dataframe shape (images, pwidth, pheight, channels): {x_test.shape}')
 
 '''
-The num_classes parameter indicates how many unique labels the model will predict.
+Set some parameters and log their values.
 '''
 num_classes: int = 10
 logger.info(f'Number of classifications for the model to predict: {num_classes}')
 
+batch_size: int = 64
+logger.info(f'Batch size for model training: {batch_size}')
+
+epochs: int = 20
+logger.info(f'Epochs (iterations) for model training: {epochs}')
+
 '''
 Implement a prepared, sequential convolutional neural network model.
 '''
+callbacks: list = [
+    keras.callbacks.ModelCheckpoint(filepath="mnist_at_epoch_{epoch}.keras"),
+    keras.callbacks.EarlyStopping(patience=2)
+]
+
 with SequentialConv2D(input_shape=x_train.shape[1:], num_classes=num_classes) as model:
     model.summary()
+
+    model.compile(loss=keras.losses.SparseCategoricalCrossentropy(),
+                  optimizer=keras.optimizers.Adam(learning_rate=1e-3),
+                  metrics=[keras.metrics.SparseCategoricalAccuracy(name="acc")])
+
+    model.fit(
+        x_train,
+        y_train,
+        batch_size=batch_size,
+        epochs=epochs,
+        validation_split=0.15,
+        callbacks=callbacks
+    )
+
+    score = model.evaluate(x_test, y_test, verbose=1)
+
+    print(model.predict(x_test[:1]))

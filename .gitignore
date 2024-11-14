@@ -26,6 +26,7 @@ local.*
 
 # Log files
 log/*.log
+tune/*
 
 # Plugins
 .coverage

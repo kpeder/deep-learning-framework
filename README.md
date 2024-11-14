@@ -27,6 +27,22 @@ The framework is tested on Ubuntu 24.04 and Python 3.12.3, but should work fine 
 
     ```$ make test```
 
+## Running the Examples
+Make sure you've set your PYTHONPATH:
+
+    ```$ export PYTHONPATH=`pwd`/src```
+
+Run the examples (some are long-running!):
+
+    1. Create and train a static model.
+        ```$ python3 examples/mnist.py```
+
+    2. Create and train a Hypermodel.
+        ```$ python3 examples/tuner.py```
+
+    3. Create and train a Hypermodel using multiple threads.
+        ```$ python3 examples/mptuner.py```
+
 ## Contributing
 Feel free to contribute to this framework via [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
   - [ ] All checks and tests must pass using ```make pre-commit; make test```

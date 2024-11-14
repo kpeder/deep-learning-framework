@@ -140,10 +140,10 @@ with getContextLogger(name='__ser0__') as ctxtlogger:
 
         try:
             tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
-                                      max_trials=3,
+                                      max_trials=6,
                                       hypermodel=tunable,
                                       directory="tune",
-                                      project_name="run0",
+                                      project_name="ran0",
                                       overwrite=True)
             ctxtlogger.info(f'Configured {type(tune).__name__} tuner with {type(tunable).__name__} hypermodel.')
         except Exception as e:
@@ -153,5 +153,6 @@ with getContextLogger(name='__ser0__') as ctxtlogger:
         ctxtlogger.info(f'Running a parameter space search on the {type(tunable).__name__} hypermodel.')
         tune.search(x_train=x_train, y_train=y_train, callbacks=callbacks)
 
-        best_params = tune.get_best_hyperparameters()[0]
-        logger.info(best_params.values)
+        trials = tune.oracle.get_best_trials(num_trials=1)
+        for trial in trials:
+            logger.info(f'Best score {trial.score} achieved in trial {trial.trial_id} with parameters {trial.hyperparameters.values}.')

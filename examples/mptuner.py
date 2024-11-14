@@ -66,7 +66,7 @@ import keras  # type: ignore # noqa: E402
 logger.info(f'Using keras version {keras.__version__}.')
 
 
-def project_worker(project: str):
+def random_trial_worker(project: str):
     ''' Define the worker function.'''
     try:
         with getContextLogger(level=logging.INFO, name=project) as plogger:
@@ -142,17 +142,17 @@ def project_worker(project: str):
 
                 plogger.info(f'Finished parameter space search on the {type(tunable).__name__} hypermodel.')
 
-                return project, tune.get_best_hyperparameters()[0]
+                return project, tune.oracle.get_best_trials(num_trials=1)[0]
 
     except Exception as e:
         logger.exception(e)
         raise e
 
 
-def project_callback(results: list[tuner.Tuner]):
+def best_trial_callback(results: list[tuner.Tuner]):
     try:
         for result in results:
-            logger.info(f'Project {result[0]} returned best parameters {result[1].values}.')
+            logger.info(f'Project {result[0]} returned best score {result[1].score} in trial {result[1].trial_id} with parameters {result[1].hyperparameters.values}.')
     except Exception as e:
         logger.exception(e)
         raise e
@@ -163,5 +163,8 @@ with mp.Pool(conf.configuration["multiprocessing"]["workers"]) if conf.configura
 
     if mpp is not None:
 
-        results = mpp.map_async(project_worker, ['__par0__', '__par1__'], callback=project_callback)
+        results = mpp.map_async(random_trial_worker, ['__ran1__',
+                                                      '__ran2__',
+                                                      '__ran3__',
+                                                      '__ran4__'], callback=best_trial_callback)
         results.wait()

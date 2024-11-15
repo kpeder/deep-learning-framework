@@ -100,17 +100,22 @@ Set some parameters and log their values.
 num_classes: int = 10
 logger.info(f'Number of classifications for the model to predict: {num_classes}')
 
-batch_size: int = 64
+batch_size: int = 128
 logger.info(f'Batch size for model training: {batch_size}')
 
-epochs: int = 20
+epochs: int = 8
 logger.info(f'Epochs (iterations) for model training: {epochs}')
+
+validation_split: float = 0.2
+logger.info(f'Validation split for model training: {validation_split}')
+
+learning_rate: float = 1e-3
+logger.info(f'Learning rate for model training: {learning_rate}')
 
 '''
 Implement a prepared, sequential convolutional neural network model.
 '''
 callbacks: list = [
-    keras.callbacks.ModelCheckpoint(filepath="mnist_at_epoch_{epoch}.keras"),
     keras.callbacks.EarlyStopping(patience=2)
 ]
 
@@ -118,18 +123,17 @@ with SequentialConv2D(input_shape=x_train.shape[1:], num_classes=num_classes) as
     model.summary()
 
     model.compile(loss=keras.losses.SparseCategoricalCrossentropy(),
-                  optimizer=keras.optimizers.Adam(learning_rate=1e-3),
-                  metrics=[keras.metrics.SparseCategoricalAccuracy(name="acc")])
+                  optimizer=keras.optimizers.Adam(learning_rate=learning_rate),
+                  metrics=[keras.metrics.SparseCategoricalAccuracy(name='sparse_categorical_accuracy')])
 
     model.fit(
         x_train,
         y_train,
         batch_size=batch_size,
         epochs=epochs,
-        validation_split=0.15,
+        validation_split=validation_split,
         callbacks=callbacks
     )
 
     score = model.evaluate(x_test, y_test, verbose=1)
-
-    print(model.predict(x_test[:1]))
+    print(score)

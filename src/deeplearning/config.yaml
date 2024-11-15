@@ -8,4 +8,4 @@ logging:
   type: stream
 multiprocessing:
   enabled: False
-  workers: 3
+  workers: 2

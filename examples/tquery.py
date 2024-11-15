@@ -6,9 +6,7 @@ import argparse
 import datetime
 import keras_tuner as tuner  # type: ignore
 import logging
-import numpy  # type: ignore
 import os
-import string
 import sys
 
 
@@ -93,7 +91,6 @@ with getContextLogger(name='__rslt__') as ctxtlogger:
         for project in project_list:
             try:
                 tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
-                                          #max_trials=6,
                                           hypermodel=tunable,
                                           directory="tune",
                                           project_name=project,
@@ -109,7 +106,7 @@ with getContextLogger(name='__rslt__') as ctxtlogger:
                     combined_trials.append(trial)
 
         if len(combined_trials) == 0:
-            ctxtlogger.info(f'No completed trials available.')
+            ctxtlogger.info('No completed trials available.')
         else:
             combined_trials.sort(key=lambda x: x.score, reverse=True)
 

@@ -35,7 +35,7 @@ def test_default_config():
                 },
                 'multiprocessing': {
                     'enabled': False,
-                    'workers': 3
+                    'workers': 2
                 }
             }
         except Exception as e:
@@ -76,7 +76,7 @@ def test_update_config():
                 },
                 'multiprocessing': {
                     'enabled': True,
-                    'workers': 3
+                    'workers': 2
                 }
             }
         except Exception as e:
@@ -163,7 +163,7 @@ def test_from_file_config():
                 },
                 'multiprocessing': {
                     'enabled': False,
-                    'workers': 3
+                    'workers': 2
                 }
             }
         except Exception as e:

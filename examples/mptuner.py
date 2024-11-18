@@ -107,7 +107,10 @@ def random_trial_worker(project: str):
                 model.summary()
 
                 try:
+                    ''' Validation configuration. Overwritten later.'''
                     hp.Fixed('epochs', 1)
+                    hp.Float('validation_split', 0.15, 0.15)
+                    hp.Int('batch_size', 128, 128)
                     tunable.fit(hp, model, x_train, y_train, callbacks=None)
                     plogger.info('Fit model with one epoch from default parameters (sanity test).')
                 except Exception as e:
@@ -125,11 +128,18 @@ def random_trial_worker(project: str):
                     plogger.exception(e)
                     raise e
 
+                ''' Update the parameters for trial runs.'''
+                hp = tuner.HyperParameters()
+                hp.Fixed('epochs', 8)
+                hp.Float('validation_split', 0.1, 0.3, step=0.05)
+                hp.Int('batch_size', 32, 256, step=2, sampling='log')
+
                 try:
                     tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
                                               max_trials=4,
                                               hypermodel=tunable,
-                                              directory="tune",
+                                              hyperparameters=hp,
+                                              directory='tune',
                                               project_name=project.strip('__'),
                                               overwrite=True)
                     plogger.info(f'Configured {type(tune).__name__} tuner with {type(tunable).__name__} hypermodel.')

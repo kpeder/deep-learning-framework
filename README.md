@@ -43,6 +43,9 @@ Run the examples (some are long-running!):
     3. Create and train a Hypermodel using multiple threads.
         ```$ python3 examples/mptuner.py```
 
+    4. Get the best Hyperparameters across trial runs.
+        ```python3 examples/tquery.py --project-prefix ran --top-trials 3```
+
 ## Contributing
 Feel free to contribute to this framework via [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
   - [ ] All checks and tests must pass using ```make pre-commit; make test```

@@ -63,7 +63,7 @@ import keras  # type: ignore # noqa: E402
 logger.info(f'Using keras version {keras.__version__}.')
 
 ''' Get a logger.'''
-with getContextLogger(name='__ser0__') as ctxtlogger:
+with getContextLogger(name='__ran0__') as ctxtlogger:
 
     ''' Set the loglevel.'''
     ctxtlogger.setLevel(logging.INFO)
@@ -104,7 +104,7 @@ with getContextLogger(name='__ser0__') as ctxtlogger:
                                  metrics=[keras.metrics.SparseCategoricalAccuracy(name='sparse_categorical_accuracy')],
                                  verbose=1) as tunable:
 
-        ctxtlogger.info('Created tunable Hypermodel {tunable.name}.')
+        ctxtlogger.info(f'Created tunable Hypermodel {tunable.name}.')
 
         ''' Build our default model, for a sanity check.'''
         hp = tuner.HyperParameters()
@@ -120,7 +120,10 @@ with getContextLogger(name='__ser0__') as ctxtlogger:
         model.summary()
 
         try:
+            ''' Validation configuration. Overwritten later.'''
             hp.Fixed('epochs', 1)
+            hp.Float('validation_split', 0.15, 0.15)
+            hp.Int('batch_size', 128, 128)
             tunable.fit(hp, model, x_train, y_train, callbacks=None)
             ctxtlogger.info('Fit model with one epoch from default parameters (sanity test).')
         except Exception as e:
@@ -138,12 +141,19 @@ with getContextLogger(name='__ser0__') as ctxtlogger:
             ctxtlogger.exception(e)
             raise e
 
+        ''' Update the parameters for trial runs.'''
+        hp = tuner.HyperParameters()
+        hp.Fixed('epochs', 8)
+        hp.Float('validation_split', 0.1, 0.3, step=0.05)
+        hp.Int('batch_size', 32, 256, step=2, sampling='log')
+
         try:
             tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
-                                      max_trials=6,
+                                      max_trials=4,
                                       hypermodel=tunable,
-                                      directory="tune",
-                                      project_name="ran0",
+                                      hyperparameters=hp,
+                                      directory='tune',
+                                      project_name='ran0',
                                       overwrite=True)
             ctxtlogger.info(f'Configured {type(tune).__name__} tuner with {type(tunable).__name__} hypermodel.')
         except Exception as e:

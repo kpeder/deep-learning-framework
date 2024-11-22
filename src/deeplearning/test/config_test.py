@@ -146,7 +146,7 @@ def test_from_file_config():
         e (Exception): Any unhandled exception, as necessary.
     '''
     with Config() as conf:
-        path = f'{os.environ.get('PYTHONPATH')}/deeplearning/config.yaml'
+        path = f'{os.environ.get("PYTHONPATH")}/deeplearning/config.yaml'
         config = conf.from_file(format='YAML',
                                 path=path)
         conf.configure(config=config)

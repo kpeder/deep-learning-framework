@@ -26,7 +26,10 @@ local.*
 
 # Log files
 log/*.log
+
+# Output files
 tune/*
+pipelines/*
 
 # Plugins
 .coverage

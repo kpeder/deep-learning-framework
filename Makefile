@@ -1,3 +1,5 @@
+PYTHON = $(shell which python3.10 2>/dev/null)
+
 .PHONY: help
 help:
 	@echo 'make <target>'
@@ -16,8 +18,21 @@ pre-commit:
 
 .PHONY: install
 install:
-	@sudo pip3 install -r requirements.txt --break-system-packages
+ifneq ($(PYTHON),)
+	@python3.10 -m ensurepip --upgrade
+	@python3.10 -m pip install -r requirements-python3.10.txt
+	@python3.10 -m pip install --upgrade setuptools
+else
+	@echo 'Python 3.10 not found! Some Tensorflow Extended (TFX) features may not work!'
+	@sudo python3 -m pip install -r requirements.txt --break-system-packages
+	@sudo python3 -m pip install --upgrade setuptools --break-system-packages
+endif
 
 .PHONY: test
 test:
-	@export PYTHONPATH=$(shell pwd)/src && pytest -vv --cov ./src
+ifneq ($(PYTHON),)
+	@export PYTHONPATH=$(shell pwd)/src && python3.10 -m pytest -vv --cov ./src
+else
+	@echo 'Python 3.10 not found! Some Tensorflow Extended (TFX) features may not work!'
+	@export PYTHONPATH=$(shell pwd)/src && python3 -m pytest -vv --cov ./src
+endif

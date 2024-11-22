@@ -14,7 +14,14 @@ jobs:
       - name: Install OS packages
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y build-essential pre-commit
+          sudo apt-get install -y build-essential pre-commit \
+                                  libbz2-dev libffi-dev liblzma-dev \
+                                  libsnappy-dev libsqlite3-dev \
+                                  libssl-dev python3-dev
+      - name: Install Python3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
       - name: Install Python modules
         run: |
           make install

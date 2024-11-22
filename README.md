@@ -13,7 +13,9 @@ Some elements of the framework may require external components to be installed a
 1. Kubeflow installed and running in the Kubernetes cluster.
 
 ## Configuration
-The framework is tested on Ubuntu 24.04 with Python 3.10.15, but should work fine with any Python 3.10 environment.
+The framework is tested on Ubuntu 24.04 with Python 3.10.15 and 3.12.3.
+
+NOTE: Tensorflow Extended pipelines do not yet support Python 3.12, so Python 3.10 is recommended.
 
 1. Install required system packages (Ubuntu-specific):
 

@@ -68,8 +68,3 @@ with get_tmp_dir(prefix='example-data') as DATA_ROOT:
                                    data_root=DATA_ROOT)
 
     tfx.orchestration.LocalDagRunner().run(pipeline)
-
-
-# ds = tfds.load('mnist', split=['train', 'test'], batch_size=64, as_supervised=True, shuffle_files=True)
-# tfds.benchmark(ds)
-# logger.info(ds)

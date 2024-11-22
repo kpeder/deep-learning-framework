@@ -3,7 +3,7 @@ from deeplearning.utils.pipelines import get_tmp_dir, create_csv_pipeline
 
 import datetime
 import itertools
-import kfp
+import kfp  # type: ignore
 import logging
 import os
 import sys

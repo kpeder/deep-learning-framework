@@ -20,7 +20,7 @@ def create_csv_pipeline(pipeline_name: str,
                         enable_cache: bool = False,
                         metadata_path: Optional[str] = None):
     '''
-    Builds a CSV TFX pipeline.
+    Builds a TFX pipeline from imported CSV data.
     '''
     components: list = []
 
@@ -48,7 +48,7 @@ def create_tfr_pipeline(pipeline_name: str,
                         enable_cache: bool = False,
                         metadata_path: Optional[str] = None):
     '''
-    Builds a tensor TFX pipeline.
+    Builds a TFX pipeline from imported TF Records.
     '''
     components: list = []
 

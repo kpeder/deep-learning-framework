@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 @contextmanager
 def getContextQueue():
-    ''' A function to make the Queue class context managed.'''
+    ''' A helper function to make the Queue class context managed.'''
     queue = Queue()
 
     try:

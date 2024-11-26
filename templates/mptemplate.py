@@ -11,9 +11,7 @@ import os
 import sys
 
 
-'''
-Set up the Python Logger using the configuration class defaults.
-'''
+''' Set up the Python Logger using the configuration class defaults.'''
 handler: logging.Handler
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -55,7 +53,10 @@ parser.add_argument('--keras-backend-override', action='store', dest='keras_back
 args = parser.parse_args()
 
 
-''' Configure and import Keras.'''
+'''
+Configure and import Keras.
+We can't reconfigure the keras backend once it's imported.
+'''
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
 
@@ -63,7 +64,6 @@ import keras  # type: ignore # noqa: E402
 
 
 logger.info(f'Using keras version {keras.__version__}.')
-
 
 ''' Use a worker pool with async map and callback.'''
 with mp.Pool(conf.configuration["multiprocessing"]["workers"]) if conf.configuration["multiprocessing"]["enabled"] else nullcontext() as mpp:
@@ -78,7 +78,6 @@ with mp.Pool(conf.configuration["multiprocessing"]["workers"]) if conf.configura
             result_list.append(result)
 
         results_logger(result_list, __name__)
-
 
 ''' Perform threaded parallel processing from a work queue.'''
 with mp.Manager() if conf.configuration["multiprocessing"]["enabled"] else nullcontext() as mpp:

@@ -13,9 +13,7 @@ import os
 import sys
 
 
-'''
-Set up the Python Logger using the configuration class defaults.
-'''
+''' Set up the Python Logger using the configuration class defaults.'''
 handler: logging.Handler
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -44,9 +42,7 @@ try:
 except Exception as e:
     raise e
 
-'''
-Configure argument parsing, for convenience.
-'''
+''' Configure argument parsing, for convenience.'''
 parser = argparse.ArgumentParser()
 
 ''' Optional backend override.'''
@@ -56,6 +52,7 @@ args = parser.parse_args()
 
 '''
 Configure and import Keras.
+We can't reconfigure the keras backend once it's imported.
 '''
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
@@ -67,7 +64,7 @@ logger.info(f'Using keras version {keras.__version__}.')
 
 
 def random_trial_worker(project: str):
-    ''' Define the worker function.'''
+    ''' Define the multiprocessing worker function.'''
     try:
         with getContextLogger(level=logging.INFO, name=project) as plogger:
 
@@ -107,7 +104,7 @@ def random_trial_worker(project: str):
                 model.summary()
 
                 try:
-                    ''' Validation configuration. Overwritten later.'''
+                    ''' Validation config. Overwritten later.'''
                     hp.Fixed('epochs', 1)
                     hp.Float('validation_split', 0.15, 0.15)
                     hp.Int('batch_size', 128, 128)
@@ -134,6 +131,7 @@ def random_trial_worker(project: str):
                 hp.Float('validation_split', 0.1, 0.3, step=0.05)
                 hp.Int('batch_size', 32, 256, step=2, sampling='log')
 
+                ''' Run Hypermodel trials to find the best fit.'''
                 try:
                     tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
                                               max_trials=4,
@@ -160,6 +158,7 @@ def random_trial_worker(project: str):
 
 
 def best_trial_callback(results: list[tuner.Tuner]):
+    ''' Define the callback function.'''
     try:
         for result in results:
             logger.info(f'Project {result[0]} returned best score {result[1].score} in trial {result[1].trial_id} with parameters {result[1].hyperparameters.values}.')

@@ -111,7 +111,7 @@ with getContextLogger(name='__ran0__') as ctxtlogger:
         model.summary()
 
         try:
-            ''' Validation configuration. Overwritten later.'''
+            ''' Validation config. Overwritten later.'''
             hp.Fixed('epochs', 1)
             hp.Float('validation_split', 0.15, 0.15)
             hp.Int('batch_size', 128, 128)

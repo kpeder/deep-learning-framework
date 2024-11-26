@@ -10,7 +10,18 @@ logger = logging.getLogger(__name__)
 
 
 def dequeue(queue: Queue):
-    ''' Dequeue wrapper.'''
+    '''
+    Dequeue wrapper.
+
+    Args:
+        queue: A queue object from which to fetch.
+
+    Returns:
+        result: A dequeued (tuple) value.
+
+    Raises:
+        e (Exception): Any unhandled exception, as necessary.
+    '''
     try:
         result = queue.get(block=False)
         return result
@@ -20,7 +31,19 @@ def dequeue(queue: Queue):
 
 
 def enqueue(item: tuple, queue: Queue):
-    ''' Enqueue wrapper.'''
+    '''
+    Enqueue wrapper.
+
+    Args:
+        item: A tuple containing an item or collection of items to enqueue.
+        queue: A queue object from which to fetch.
+
+    Returns:
+        None
+
+    Raises:
+        e (Exception): Any unhandled exception, as necessary.
+    '''
     try:
         queue.put(item)
     except Exception as e:

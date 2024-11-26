@@ -12,6 +12,13 @@ class SequentialConv2D(keras.Sequential, AbstractContextManager):
     def __init__(self, input_shape: tuple, num_classes: int):
         '''
         Implement the default model and return the instance.
+
+        Args:
+            input_shape: Tuple representing the shape of the input tensor.
+            num_classes: Integer count of classifications or categories.
+
+        Returns:
+            self: Configured subclass with opinionated keras.Sequential model.
         '''
         super().__init__([
             keras.layers.Input(shape=input_shape),
@@ -26,15 +33,11 @@ class SequentialConv2D(keras.Sequential, AbstractContextManager):
             keras.layers.Dense(num_classes, activation="softmax")])
 
     def __enter__(self):
-        '''
-        Context Manager entry method.
-        '''
+        ''' Context Manager entry method.'''
         return self
 
     def __exit__(self, *args) -> Literal[False]:
-        '''
-        Context Manager exit method.
-        '''
+        ''' Context Manager exit method.'''
         return False
 
 
@@ -44,7 +47,17 @@ class SequentialConv2DTunable(tuner.HyperModel, AbstractContextManager):
     '''
     def __init__(self, input_shape: tuple, num_classes: int, name: str = 'SeqConv2DTunable', metrics: list = [], verbose: int = 2):
         '''
-        Initialize the class.
+        Initialize the class and return the instance.
+
+        Args:
+            input_shape: Tuple representing the shape of the input tensor.
+            num_classes: Integer count of classifications or categories.
+            name: A string representing the name of the Hypermodel.
+            metrics: A list of metrics from which the Hypermodel's objective may be selected.
+            verbose: Integer from 0-2 representing the verbosity of the Hypermodel output.
+
+        Returns:
+            self: Configured subclass with opinionated tunable Hypermodel and defaults.
         '''
         super().__init__(name, tunable=True)
 
@@ -55,7 +68,13 @@ class SequentialConv2DTunable(tuner.HyperModel, AbstractContextManager):
 
     def build(self, hp):
         '''
-        Implement the model with Hyperparameters and return the instance.
+        Implement a keras.Sequential model with Hyperparameters and return the instance.
+
+        Args:
+            hp: A Hyperparameter object containing an unconfigured, partially configured or fully configured parameter space.
+
+        Returns:
+            model: A configured Hypermodel object.
         '''
         global_average_pool: bool = hp.Boolean('global_average_pool', True)
         initial_filters: int = hp.Int('initial_filters', 32, 64, step=32)
@@ -94,7 +113,17 @@ class SequentialConv2DTunable(tuner.HyperModel, AbstractContextManager):
             y_train,
             callbacks: keras.callbacks.CallbackList):
         '''
-        Train the model with Hyperparameters and return the instance.
+        Train the model with Hyperparameters and return the output.
+
+        Args:
+            hp: A Hyperparameter object containing an unconfigured, partially configured or fully configured parameter space.
+            model: A configured Hypermodel, as returned by the build() function of the same class.
+            x_train: A tensor containing image data.
+            y_train: A tensor containing labels.
+            callbacks: A list of callbacks to process after each epoch during model fit.
+
+        Returns:
+            model: A configured Hypermodel object.
         '''
         return model.fit(
             x_train,
@@ -107,13 +136,9 @@ class SequentialConv2DTunable(tuner.HyperModel, AbstractContextManager):
         )
 
     def __enter__(self):
-        '''
-        Context Manager entry method.
-        '''
+        ''' Context Manager entry method.'''
         return self
 
     def __exit__(self, *args) -> Literal[False]:
-        '''
-        Context Manager exit method.
-        '''
+        ''' Context Manager exit method.'''
         return False

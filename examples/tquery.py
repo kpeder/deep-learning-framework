@@ -10,9 +10,7 @@ import os
 import sys
 
 
-'''
-Set up the Python Logger using the configuration class defaults.
-'''
+''' Set up the Python Logger using the configuration class defaults.'''
 handler: logging.Handler
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -40,15 +38,13 @@ try:
 except Exception as e:
     raise e
 
-'''
-Configure argument parsing, for convenience.
-'''
+''' Configure argument parsing, for convenience.'''
 parser = argparse.ArgumentParser()
 
 ''' Optional backend override.'''
 parser.add_argument('--keras-backend-override', action='store', dest='keras_backend_override')
 
-''' Project prefix.'''
+''' Add project prefix and top trials arguments.'''
 parser.add_argument('--project-prefix', action='store', dest='project_prefix')
 parser.add_argument('--top-trials', action='store', dest='top_trials', default=1, type=int)
 
@@ -56,6 +52,7 @@ args = parser.parse_args()
 
 '''
 Configure and import Keras.
+We can't reconfigure the keras backend once it's imported.
 '''
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
@@ -65,7 +62,7 @@ import keras  # type: ignore # noqa: E402
 
 logger.info(f'Using keras version {keras.__version__}.')
 
-''' Get a logger.'''
+''' Get a context managed logger.'''
 with getContextLogger(name='__rslt__') as ctxtlogger:
 
     ''' Set the loglevel.'''
@@ -80,6 +77,7 @@ with getContextLogger(name='__rslt__') as ctxtlogger:
 
         ctxtlogger.info(f'Created tunable Hypermodel {tunable.name}.')
 
+        ''' Create a list of project directories to query.'''
         project_list: list = []
         for dir in os.listdir('tune'):
             if dir.startswith(args.project_prefix):
@@ -87,6 +85,7 @@ with getContextLogger(name='__rslt__') as ctxtlogger:
 
         ctxtlogger.info(f'Processing trials in project directories {project_list}')
 
+        ''' Use a tuner oracle to query each project and collect top trials.'''
         combined_trials: list = []
         for project in project_list:
             try:
@@ -105,6 +104,7 @@ with getContextLogger(name='__rslt__') as ctxtlogger:
                 if trial.status == 'COMPLETED':
                     combined_trials.append(trial)
 
+        ''' Sort the results and log the combined top trials.'''
         if len(combined_trials) == 0:
             ctxtlogger.info('No completed trials available.')
         else:

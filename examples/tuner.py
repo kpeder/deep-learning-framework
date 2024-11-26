@@ -11,9 +11,7 @@ import os
 import sys
 
 
-'''
-Set up the Python Logger using the configuration class defaults.
-'''
+''' Set up the Python Logger using the configuration class defaults.'''
 handler: logging.Handler
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -41,18 +39,17 @@ try:
 except Exception as e:
     raise e
 
-'''
-Configure argument parsing, for convenience.
-'''
+''' Configure argument parsing, for convenience.'''
 parser = argparse.ArgumentParser()
 
-''' Optional backend override.'''
+''' Optional kwarg for keras backend override.'''
 parser.add_argument('--keras-backend-override', action='store', dest='keras_backend_override')
 
 args = parser.parse_args()
 
 '''
-Configure and import Keras.
+Configure and import Keras and our custom sequential model class.
+We can't reconfigure the keras backend once it's imported.
 '''
 os.environ["KERAS_BACKEND"] = (args.keras_backend_override or conf.configuration["keras"]["backend"])
 logger.info(f'Configuring Keras backend as "{os.environ["KERAS_BACKEND"]}".')
@@ -62,7 +59,7 @@ import keras  # type: ignore # noqa: E402
 
 logger.info(f'Using keras version {keras.__version__}.')
 
-''' Get a logger.'''
+''' Get a context managed logger.'''
 with getContextLogger(name='__ran0__') as ctxtlogger:
 
     ''' Set the loglevel.'''
@@ -78,23 +75,17 @@ with getContextLogger(name='__ran0__') as ctxtlogger:
     (x_train, y_train), (x_test, y_test) = keras.datasets.mnist.load_data()
     ctxtlogger.info('Loaded the mnist dataset to training and test tensors.')
 
-    '''
-    Cast image pixels to float, then normalize pixel brightness to scale [0,1].
-    '''
+    ''' Cast image pixels to float, then normalize pixel brightness to scale [0,1].'''
     x_train = x_train.astype('float32') / 255
     x_test = x_test.astype('float32') / 255
     ctxtlogger.info('Normalized tensor data to scale [0,1].')
 
-    '''
-    Expand the shape of the dataframes to include binary color channel.
-    '''
+    '''Expand the shape of the dataframes to include binary color channel.'''
     x_train = numpy.expand_dims(x_train, -1)
     x_test = numpy.expand_dims(x_test, -1)
     ctxtlogger.info('Expanded data shape to add color channel.')
 
-    '''
-    Check the shape of the dataframes and log the information.
-    '''
+    ''' Check the shape of the dataframes and log the information.'''
     ctxtlogger.info(f'Train dataframe shape (images, pwidth, pheight, channels): {x_train.shape}')
     ctxtlogger.info(f'Test dataframe shape (images, pwidth, pheight, channels): {x_test.shape}')
 
@@ -147,6 +138,7 @@ with getContextLogger(name='__ran0__') as ctxtlogger:
         hp.Float('validation_split', 0.1, 0.3, step=0.05)
         hp.Int('batch_size', 32, 256, step=2, sampling='log')
 
+        ''' Run Hypermodel trials to find the best fit.'''
         try:
             tune = tuner.RandomSearch(objective=tuner.Objective('sparse_categorical_accuracy', direction='max'),
                                       max_trials=4,

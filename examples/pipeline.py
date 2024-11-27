@@ -1,6 +1,7 @@
 from deeplearning.utils.config import Config
+from deeplearning.utils.filesystem import get_tmp_dir
 from deeplearning.utils.logger import getContextLogger
-from deeplearning.utils.pipelines import get_tmp_dir, create_csv_pipeline, create_tfr_pipeline, serialize_image_data
+from deeplearning.utils.pipelines import create_csv_pipeline, create_tfr_pipeline, serialize_image_data
 
 import datetime
 import itertools

@@ -1,8 +1,7 @@
-from deeplearning.utils.pipelines import _bytes_feature, _float_feature, _int64_feature, get_tmp_dir, serialize_array, serialize_image_data
+from deeplearning.utils.pipelines import _bytes_feature, _float_feature, _int64_feature, serialize_array, serialize_image_data
 
 import logging
 import numpy  # type: ignore
-import os
 import tensorflow as tf  # type: ignore
 
 
@@ -51,33 +50,6 @@ def test_float_feature():
     except Exception as e:
         logger.exception(e)
         raise e
-
-
-def test_get_tmp_dir():
-    '''
-    Function to test the get_tmp_dir function.
-
-    Args:
-        None
-
-    Returns:
-        None
-
-    Raises:
-        e (Exception): Any unhandled exception, as necessary.
-    '''
-
-    with get_tmp_dir(prefix='test-tmpdir') as temp:
-        try:
-            filepath = os.path.join(temp, 'tempfile.txt')
-            with open(filepath, 'w+') as tempfile:
-                tempfile.write('test\n')
-                assert isinstance(os.stat(filepath), os.stat_result)
-        except Exception as e:
-            logger.exception(e)
-            raise e
-
-    assert not os.path.isdir(temp)
 
 
 def test_int64_feature():

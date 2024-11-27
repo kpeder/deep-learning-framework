@@ -1,0 +1,3 @@
+services:
+  deeplearningframework:
+    command: make pre-commit; make test

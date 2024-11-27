@@ -1,0 +1,14 @@
+services:
+  deeplearningframework:
+    image: deeplearningframework
+    container_name: deeplearningframework
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    environment:
+      PYTHONPATH: ""
+      MODELPY: "examples/tquery.py --project-prefix ran --top-trials 3"
+    command: ./start.sh
+    
+

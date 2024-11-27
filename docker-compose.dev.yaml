@@ -1,0 +1,5 @@
+services:
+  deeplearningframework:
+    volumes:
+      - ".:/app/deep-learning-framework"
+    #command: /bin/bash -c "sleep 24h"

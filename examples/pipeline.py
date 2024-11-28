@@ -1,5 +1,4 @@
 from deeplearning.utils.config import Config
-from deeplearning.utils.filesystem import get_tmp_dir
 from deeplearning.utils.logger import getContextLogger
 from deeplearning.utils.pipelines import create_csv_pipeline, create_tfr_pipeline, serialize_image_data
 
@@ -10,6 +9,7 @@ import logging
 import numpy  # type: ignore
 import os
 import sys
+import tempfile
 import tensorflow_datasets as tfds  # type: ignore
 import tensorflow as tf  # type: ignore
 import tfx.v1 as tfx  # type: ignore
@@ -56,7 +56,7 @@ with getContextLogger(name='__csvf__') as csvflogger:
     csvflogger.propagate = False
 
     ''' Get a temp dir that will be cleaned up after example generation.'''
-    with get_tmp_dir(prefix='example-data') as CSV_DATA_ROOT:
+    with tempfile.TemporaryDirectory(prefix='example-data') as CSV_DATA_ROOT:
 
         ''' Grab some data.'''
         _data_url = 'https://raw.githubusercontent.com/tensorflow/tfx/master/tfx/examples/penguin/data/labelled/penguins_processed.csv'
@@ -64,7 +64,7 @@ with getContextLogger(name='__csvf__') as csvflogger:
         geturl.urlretrieve(_data_url, _data_filepath)
 
         ''' Set pipeline filesystem location parameters.'''
-        CSV_PIPELINE_NAME: str = 'csv_penguins'
+        CSV_PIPELINE_NAME: str = 'penguins'
         CSV_PIPELINE_PATH: str = os.path.join('pipelines', CSV_PIPELINE_NAME)
         CSV_METADATA_PATH: str = os.path.join(CSV_PIPELINE_PATH, 'metadata/metadata.db')
         CSV_SERVING_PATH: str = os.path.join(CSV_PIPELINE_PATH, 'serving')
@@ -91,7 +91,7 @@ with getContextLogger(name='__tfrf__') as mnstlogger:
     mnstlogger.propagate = False
 
     ''' Get a temp dir that will be cleaned up after data serialization.'''
-    with get_tmp_dir(prefix='mnist-data') as TFR_DATA_ROOT:
+    with tempfile.TemporaryDirectory(prefix='mnist-data') as TFR_DATA_ROOT:
 
         ''' Grab some data.'''
         _data_url = 'https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz'
@@ -99,7 +99,7 @@ with getContextLogger(name='__tfrf__') as mnstlogger:
         geturl.urlretrieve(_data_url, _data_filepath)
 
         ''' Set pipeline filesystem location parameters.'''
-        TFR_PIPELINE_NAME: str = 'tfr_mnist'
+        TFR_PIPELINE_NAME: str = 'mnist'
         TFR_PIPELINE_PATH: str = os.path.join('pipelines', TFR_PIPELINE_NAME)
         TFR_METADATA_PATH: str = os.path.join(TFR_PIPELINE_PATH, 'metadata/metadata.db')
         TFR_SERVING_PATH: str = os.path.join(TFR_PIPELINE_PATH, 'serving')
@@ -128,7 +128,7 @@ with getContextLogger(name='__tfrf__') as mnstlogger:
             mnstlogger.info(f'Reshaped test labels to categorical for digits 0-9: {y_test.shape}.')
 
             ''' Get a temp dir that will be cleaned up after example generation.'''
-            with get_tmp_dir(prefix='mnist-tfr') as TFR_ROOT:
+            with tempfile.TemporaryDirectory(prefix='mnist-tfr') as TFR_ROOT:
                 _tfrecord_filepath = os.path.join(TFR_ROOT, 'mnist.tfrecord')
                 records = tf.io.TFRecordWriter(_tfrecord_filepath)
 

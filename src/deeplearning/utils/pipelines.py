@@ -9,7 +9,6 @@ import tfx.v1 as tfx  # type: ignore
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.WARNING)
 
 
 def create_csv_pipeline(pipeline_name: str,

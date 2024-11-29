@@ -67,6 +67,10 @@ Run the examples (some are long-running!):
 
     ```$ python3 examples/pipeline.py```
 
+1. Create a Kubeflow TFX pipeline.
+
+    ```$ python3 examples/kfpipeline.py --gcs-bucket my-gcs-bucket-name```
+
 ## Contributing
 Feel free to contribute to this framework via [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).
   - [ ] All checks and tests must pass using ```make pre-commit; make test```

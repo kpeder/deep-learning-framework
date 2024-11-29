@@ -7,7 +7,6 @@ import urllib.request as geturl
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def data_fetcher(name: str, source: str, dest: str):

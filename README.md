@@ -10,8 +10,8 @@ A Python framework for creating, training, testing and tuning machine learning m
 Some elements of the framework may require external components to be installed and running.
 
 1. Docker and Minikube or an alternative local conformant Kubernetes deployment.
-1. Kubeflow installed and running in the Kubernetes cluster.
-1. A Kuberenetes secret configured for a GCP service account key using the instructions found [here](https://googlecloudplatform.github.io/kubeflow-gke-docs/docs/pipelines/authentication-pipelines/#google-service-account-keys-stored-as-kubernetes-secrets).
+1. Kubeflow installed and running in the Kubernetes cluster. Instructions can be found [here](https://www.kubeflow.org/docs/components/pipelines/operator-guides/installation/#deploying-kubeflow-pipelines).
+1. A Kuberenetes secret configured for a GCP service account key. Instructions can be found [here](https://googlecloudplatform.github.io/kubeflow-gke-docs/docs/pipelines/authentication-pipelines/#google-service-account-keys-stored-as-kubernetes-secrets).
 
 ## Configuration
 The framework is tested on Ubuntu 24.04 with Python 3.10.15 and 3.12.3.

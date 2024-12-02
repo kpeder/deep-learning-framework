@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /app/deep-learning-framework/
 echo $(pwd)
 
 if [ -z "${PYTHONPATH}" ]; then

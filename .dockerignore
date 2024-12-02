@@ -1,3 +1,5 @@
+docker/docker*
+docker/Docker*
 # Byte-compiled files
 __pycache__/
 *.py[cod]

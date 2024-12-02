@@ -73,7 +73,7 @@ Run the examples (some are long-running!):
 
 ## Running the Examples w Docker
 
-Running with docker can be more benifical as you will only require docker and will not need to adjust your local settings to support items. 
+Running with docker can be more benifical as you will only require docker and will not need to adjust your local settings to support items.
 
 1. Build the container
 
@@ -82,19 +82,19 @@ Running with docker can be more benifical as you will only require docker and wi
 1. Run various commands
 
     Adjust the `MODELPY` enviroment varaible in the docker-compose file to run the command that you wish to execute
-    
+
     ```$ docker-compose up```
 
 1. Run the Test run required by the PR commit process.
 
     This will effectively run the same command in a similar structure to the github action.
-    
+
     ```$ docker-compose -f docker-compose.yaml -f docker-compose.unittest.yaml up```
 
 1. Run the container for development purposes
 
     This will allow you to block the container and run commands locally as well, it maps the volume to your local such that the code (not container) can be updated and rerun as required.
-    
+
     ```$ docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up```
 
 ## Contributing

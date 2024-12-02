@@ -8,4 +8,3 @@ COPY ../. /app/deep-learning-framework
 
 WORKDIR /app/deep-learning-framework
 RUN make install
-

@@ -1,4 +1,4 @@
 services:
   deeplearningframework:
     volumes:
-      - ".:/app/deep-learning-framework"
+      - "../.:/app/deep-learning-framework"

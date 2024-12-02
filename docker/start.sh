@@ -16,6 +16,3 @@ if [ -z "${MODELPY}" ]; then
 fi
 
 python3 $MODELPY
-
-
-

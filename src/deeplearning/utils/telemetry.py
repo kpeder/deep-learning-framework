@@ -1,22 +1,16 @@
-from opentelemetry import (
+from opentelemetry import (  # type: ignore
     metrics,
     trace
 )
-from opentelemetry.sdk.metrics import MeterProvider
-from opentelemetry.sdk.metrics.export import (
-    InMemoryMetricReader,
+from opentelemetry.sdk.metrics import MeterProvider  # type: ignore
+from opentelemetry.sdk.metrics.export import (  # type: ignore
     ConsoleMetricExporter,
     PeriodicExportingMetricReader,
 )
-from opentelemetry.sdk.resources import (
-    SERVICE_NAME,
-    Resource
-)
-from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace import TracerProvider  # type: ignore
 from typing import Optional
 
 import logging
-import math
 
 
 logger = logging.getLogger(__name__)
@@ -72,13 +66,13 @@ def configure_tracer():
         raise e
 
 
-def get_counter(meter: Optional[metrics.Meter] = None, name: str = None):
+def get_counter(name: str, meter: Optional[metrics.Meter] = None):
     '''
     Fetch a counter metric using the currently configured metrics provider.
 
     Args:
-        meter: The meter object under which to create the metric counter.
         name: The name of the counter metric to create.
+        meter: The meter object under which to create the metric counter.
 
     Returns:
         counter: An Opentelemetry counter.
@@ -115,4 +109,3 @@ def get_meter():
     except Exception as e:
         logger.exception(e)
         raise e
-

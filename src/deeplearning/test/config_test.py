@@ -36,6 +36,10 @@ def test_default_config():
                 'multiprocessing': {
                     'enabled': False,
                     'workers': 2
+                },
+                'telemetry': {
+                    'metrics': True,
+                    'tracing': True
                 }
             }
         except Exception as e:
@@ -77,6 +81,10 @@ def test_update_config():
                 'multiprocessing': {
                     'enabled': True,
                     'workers': 2
+                },
+                'telemetry': {
+                    'metrics': True,
+                    'tracing': True
                 }
             }
         except Exception as e:
@@ -164,6 +172,10 @@ def test_from_file_config():
                 'multiprocessing': {
                     'enabled': False,
                     'workers': 2
+                },
+                'telemetry': {
+                    'metrics': True,
+                    'tracing': True
                 }
             }
         except Exception as e:

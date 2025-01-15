@@ -1,3 +1,4 @@
+from deeplearning.utils.telemetry import configure_metrics, configure_tracer
 import logging
 import sys
 
@@ -12,6 +13,13 @@ try:
     logger.setLevel(logging.WARN)
     logger.addHandler(handler)
     logger.warning(f'Package loglevel has been set to {logger.getEffectiveLevel()}.')
+except Exception as e:
+    logger.exception(e)
+    raise e
+
+try:
+    configure_metrics()
+    configure_tracer()
 except Exception as e:
     logger.exception(e)
     raise e

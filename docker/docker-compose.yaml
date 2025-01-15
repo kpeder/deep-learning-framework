@@ -1,0 +1,12 @@
+services:
+  deeplearningframework:
+    image: deeplearningframework
+    container_name: deeplearningframework
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+
+    environment:
+      PYTHONPATH: ""
+      MODELPY: "examples/mnist.py"
+    command: ./docker/start.sh

@@ -43,7 +43,7 @@ NOTE: Tensorflow Extended pipelines do not yet support Python 3.12, so Python 3.
 ## Running the Examples
 Make sure you've set your PYTHONPATH:
 
-```$ export PYTHONPATH=`pwd`/src```
+```$ export PYTHONPATH=$(pwd)/src```
 
 Run the examples (some are long-running!):
 
@@ -70,6 +70,32 @@ Run the examples (some are long-running!):
 1. Create a Kubeflow TFX pipeline.
 
     ```$ python3 examples/kfpipeline.py --gcs-bucket my-gcs-bucket-name```
+
+## Running the Examples w Docker
+
+Running with docker can be more benifical as you will only require docker and will not need to adjust your local settings to support items.
+
+1. Build the container
+
+    ```$ docker-compose build```
+
+1. Run various commands
+
+    Adjust the `MODELPY` enviroment varaible in the docker-compose file to run the command that you wish to execute
+
+    ```$ docker-compose up```
+
+1. Run the Test run required by the PR commit process.
+
+    This will effectively run the same command in a similar structure to the github action.
+
+    ```$ docker-compose -f docker-compose.yaml -f docker-compose.unittest.yaml up```
+
+1. Run the container for development purposes
+
+    This will allow you to block the container and run commands locally as well, it maps the volume to your local such that the code (not container) can be updated and rerun as required.
+
+    ```$ docker-compose -f docker-compose.yaml -f docker-compose.dev.yaml up```
 
 ## Contributing
 Feel free to contribute to this framework via [fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork).

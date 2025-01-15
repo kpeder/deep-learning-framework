@@ -9,3 +9,6 @@ logging:
 multiprocessing:
   enabled: False
   workers: 2
+telemetry:
+  metrics: True
+  tracing: True

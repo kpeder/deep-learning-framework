@@ -2,12 +2,13 @@ from google.cloud import storage  # type: ignore
 
 import logging
 import os
+import pandas
 import tempfile
 import urllib.request as geturl
 
 
 logger = logging.getLogger(__name__)
-
+logger.setLevel(logging.INFO)
 
 def data_fetcher(name: str, source: str, dest: str):
     '''
@@ -96,3 +97,33 @@ def data_pusher(name: str, source: str, dest: str):
         location = '/'.join((dest, _data_filepath.split('/')[-1]))
 
     return location
+
+
+def get_data_from_bucket(bucket_name: str, data_dir: str, data_type: str):
+    ''' Parse the data directory on a bucket and return the content as a dataframe.'''
+
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    blobs = list(bucket.list_blobs(prefix=data_dir))
+    paths = []
+    dfs = []
+    data = pandas.DataFrame()
+
+    ''' Process the files locally, but clean up afterward.'''
+    with tempfile.TemporaryDirectory(prefix='{}-data'.format(data_type)) as tempdir:
+        logger.info('Found {} data files.'.format(len(blobs)))
+        logger.info('Downloading data to temporary directory {}.'.format(tempdir))
+        for blob in blobs:
+            path = '/'.join(list([tempdir, blob.name.split('/')[-1].lower()]))
+            blob.download_to_filename(path)
+            logger.info('Downloaded blob {} to file {}.'.format(blob.name, path))
+            paths.append(path)
+        for file in paths:
+            if data_type == 'csv':
+                dfs.append(pandas.read_csv(file))
+            else:
+                logger.warning('Unsupported data type, {}.'.format(data_type))
+        if len(dfs) > 0:
+            data = pandas.concat(dfs)
+
+    return data

@@ -1,7 +1,7 @@
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split  # type: ignore
 
 import logging
-import pandas
+import pandas  # type: ignore
 
 
 logger = logging.getLogger(__name__)
@@ -20,6 +20,7 @@ def split_data(dataframe: pandas.DataFrame, split: float, label_column: str, dro
         features.pop(features.index(label_column))
     except Exception as e:
         logger.warning('Invalid label column \'{}\'.'.format(label_column))
+        raise e
 
     try:
         ''' Pop the drop columns off of the feature list.'''
@@ -28,6 +29,7 @@ def split_data(dataframe: pandas.DataFrame, split: float, label_column: str, dro
             logger.info('Dropped feature column \'{}\'.'.format(column))
     except Exception as e:
         logger.warning('Invalid drop column \'{}\'.'.format(column))
+        raise e
 
     ''' Split the feature data and labels.'''
     x = dataframe[features]

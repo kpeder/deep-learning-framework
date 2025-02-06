@@ -1,10 +1,11 @@
-from google.cloud import storage
-from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
-from sklearn.neighbors import KNeighborsRegressor
+from google.cloud import storage  # type: ignore
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor  # type: ignore
+from sklearn.neighbors import KNeighborsRegressor  # type: ignore
 
-import joblib
+import joblib  # type: ignore
 import logging
 import pickle
+import typing
 
 
 logger = logging.getLogger(__name__)
@@ -18,13 +19,13 @@ def get_model(model_type: str, **kwargs):
 
     match model_type:
         case 'rfclassifier':
-            model = RandomForestClassifier(kwargs)
+            model = RandomForestClassifier(**kwargs)
             logger.info('Configured RandomForestClassifier model.')
         case 'rfregressor':
-            model = RandomForestRegressor(kwargs)
+            model = RandomForestRegressor(**kwargs)
             logger.info('Configured RandomForestRegressor model.')
         case 'knregressor':
-            model = KNeighborsRegressor(kwargs)
+            model = KNeighborsRegressor(**kwargs)
             logger.info('Configured KNeighborsRegressor model.')
         case _:
             logger.warning('Unsupported model_type {}.'.format(model_type))
@@ -33,7 +34,7 @@ def get_model(model_type: str, **kwargs):
     return model
 
 
-def save_model(model: any, name: str = 'model', format: str = 'joblib'):
+def save_model(model: typing.Any, name: str = 'model', format: str = 'joblib'):
     ''' Save a model.'''
 
     match format:

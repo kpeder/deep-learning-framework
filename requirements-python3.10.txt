@@ -1,6 +1,7 @@
 abcmeta==2.2.1
 contextlib2==21.6.0
 flake8==7.1.1
+google-cloud-storage==2.18.2
 keras==2.15.0
 keras-tuner==1.4.7
 kfp==1.8.22
@@ -9,10 +10,12 @@ mypy==1.13.0
 numpy==1.26.4
 opentelemetry-api==1.28.2
 opentelemetry-sdk==1.28.2
+pandas==1.5.3
 pre_commit==4.0.1
 pytest==8.3.3
 pytest-cov==6.0.0
 PyYAML==6.0.2
+scikit-learn==1.6.1
 tensorflow==2.15.1
 tensorflow-datasets==4.9.7
 tfx==1.15.1

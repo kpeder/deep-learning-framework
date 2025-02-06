@@ -1,7 +1,8 @@
-from deeplearning.utils.filesystem import data_fetcher, data_pusher
+from deeplearning.utils.filesystem import data_fetcher, data_pusher, get_data_from_bucket
 
 import logging
 import os
+import pandas  # type: ignore
 import tempfile
 
 
@@ -67,3 +68,25 @@ def test_data_pusher():
             except Exception as e:
                 logger.exception(e)
                 raise e
+
+
+def test_get_data_from_bucket():
+    '''
+    Function to test the get_data_from_bucket function.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Raises:
+        e (Exception): Any unhandled exception, as necessary.
+    '''
+
+    try:
+        data = get_data_from_bucket(bucket_name='kped-dev-public', data_dir='data/csv/titanic', data_type='csv')
+        assert type(data) is pandas.DataFrame
+    except Exception as e:
+        logger.exception(e)
+        raise e

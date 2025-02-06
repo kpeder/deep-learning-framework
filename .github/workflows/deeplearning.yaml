@@ -28,6 +28,9 @@ jobs:
       - name: Run lint checks
         run: |
           make pre-commit
+      - uses: 'google-github-actions/auth@v0'
+        with:
+          credentials_json: '${{ secrets.GCP_CRED_NO_ACCESS }}'
       - name: Test the package
         run: |
           make test

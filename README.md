@@ -71,6 +71,18 @@ Run the examples (some are long-running!):
 
     ```$ python3 examples/kfpipeline.py --gcs-bucket my-gcs-bucket-name```
 
+1. Predict data points using a regression model and outcomes using a classification model with tabular data.
+
+    ```
+    $ python3 examples/classifier.py \
+        --bucket-name=kped-dev-example \
+        --data-dir=data \
+        --drop-columns=passengerid \
+        --label-column=survived \
+        --pipeline-name=titanic \
+        --source-data=https://raw.githubusercontent.com/pandas-dev/pandas/master/doc/data/titanic.csv
+    ```
+
 ## Running the Examples w Docker
 
 Running with docker can be more benifical as you will only require docker and will not need to adjust your local settings to support items.
